@@ -14,23 +14,25 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print_hi('PyCharm')
-    rx, tx = readData.read_beams_Ailton()
+    tx_1X8, tx_1X16 = readData.read_beams_Ailton()
+    tx_index, rx_index = readData.read_beams_raymobtime()
     coord = readData.read_valid_coordinates()
 
-    data_train_LOS, data_train_NLOS, data_test_LOS, data_test_NLOS = readData.divide_beams_and_coord_in_LOS_or_NLOS_connect(rx, tx, coord)
-    analyse.relation_coord_with_beams_extend_Plot2D(data_train_LOS, 'LOS')
-    analyse.relation_coord_with_beams_extend_Plot2D(data_train_NLOS, 'NLOS')
+    data_train_LOS, data_train_NLOS, data_test_LOS, data_test_NLOS = readData.divide_beams_and_coord_in_LOS_or_NLOS_connect(tx_index, rx_index, coord)
     analyse.relation_coord_with_beams_Plot2D(data_train_LOS, 'LOS')
     analyse.relation_coord_with_beams_Plot2D(data_train_NLOS, 'NLOS')
+    analyse.relation_coord_with_beams_extend_Plot2D(data_train_LOS, 'LOS')
+    analyse.relation_coord_with_beams_extend_Plot2D(data_train_NLOS, 'NLOS')
 
 
 
 
-    analyse.plot_histogram(rx, 'all', 'Rx','skyblue')
-    analyse.plot_histogram(tx, 'all', 'Tx','darkslategrey')
+
+    analyse.plot_histogram(tx_1X8, 'all', 'Tx [1X8]','skyblue')
+    analyse.plot_histogram(tx_1X16, 'all', 'Tx [1X16]','darkslategrey')
     analyse.plot_histogram(data_train_LOS, 'LOS', 'xxx', 'xxx')
     analyse.plot_histogram(data_train_NLOS, 'NLOS', 'xxx', 'xxx')
-    analyse.plot_distribution_beams(tx, rx)
+    #analyse.plot_distribution_beams(tx, rx)
 
 
 

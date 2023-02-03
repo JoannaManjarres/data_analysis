@@ -15,6 +15,31 @@ def read_beams_luan():
 
     return beans_tx, beans_rx
 
+def read_beams_raymobtime():
+    data_path = '../data/beams/Ailton/beam_output/beams_output_8x32.npz'
+    beams = np.load(data_path)['output_classification']
+    num_antennas_tx = 32
+    num_antennas_rx = 8
+
+    best_beam_index = []
+    for sample in range(beams.shape[0]):
+        best_beam_index.append(np.argmax(beams[sample, :]))
+
+    beam_index_rx = np.array(best_beam_index)
+
+    tx_index = np.zeros((beams.shape[0]), dtype=int)
+    rx_index = np.zeros((beams.shape[0]), dtype=int)
+
+    for sample in range(len(beam_index_rx)):
+        index_tx = int(best_beam_index[sample] / num_antennas_rx)
+        index_rx = int(best_beam_index[sample] - (index_tx * num_antennas_rx))
+        tx_index[sample] = index_tx
+        rx_index[sample] = index_rx
+
+    return tx_index, rx_index
+
+
+
 def read_beams_Ailton():
     data_path = '/Users/Joanna/git/Analise_de_dados/data/beams/Ailton/beam_output/beams_output_1x8.npz'
     beams = np.load(data_path)['output_classification']
