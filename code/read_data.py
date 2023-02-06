@@ -31,8 +31,8 @@ def read_beams_raymobtime():
     rx_index = np.zeros((beams.shape[0]), dtype=int)
 
     for sample in range(len(beam_index_rx)):
-        index_tx = int(best_beam_index[sample] / num_antennas_rx)
-        index_rx = int(best_beam_index[sample] - (index_tx * num_antennas_rx))
+        index_tx = best_beam_index[sample] // num_antennas_rx
+        index_rx = best_beam_index[sample] % num_antennas_rx
         tx_index[sample] = index_tx
         rx_index[sample] = index_rx
 

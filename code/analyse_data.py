@@ -19,6 +19,7 @@ def plot_histogram(all_data, connection, user, color):
     # bins = round((beam.max() - beam.min()) / bin_width)
 
     path = '/Users/Joanna/git/Analise_de_dados/results/analyzes/histogram/'
+    #path ='../results/analyzes/histogram/'
 
     if connection == 'all':
         data = pd.DataFrame(all_data, columns=['beams'])
@@ -44,9 +45,9 @@ def plot_histogram(all_data, connection, user, color):
 
         name = 'Histogram_all_Dataset_Beams_' + user + '.png'
         #plt.figure(figsize=(10,6))
-        plt.savefig(path + name, transparent=False, dpi=300)
-
+        plt.savefig(name, transparent=False, dpi=300)
         plt.show()
+        plt.close()
 
     else:
         data = pd.DataFrame(all_data, columns=['EpisodeID', 'x', 'y', 'z', 'LOS', 'rxBeams', 'txBeams'])
@@ -73,7 +74,7 @@ def plot_histogram(all_data, connection, user, color):
         #plot.fig.set_figwidth(6)
         #plot.fig.set_figheight(8)
         name = 'Histogram_of_Rx_Beams_' + connection + '.png'
-        plt.savefig(path + name, transparent=False, dpi=300)
+        plt.savefig(name, transparent=False, dpi=300)
         plt.show()
 
 
@@ -93,7 +94,7 @@ def plot_histogram(all_data, connection, user, color):
         #plot.fig.set_figwidth(6)
         #plot.fig.set_figheight(8)
         name = 'Histogram_of_Tx_Beams_' + connection + '.png'
-        plt.savefig(path + name, transparent=False, dpi=300)
+        plt.savefig(name, transparent=False, dpi=300)
         plt.show()
 
 
@@ -121,7 +122,7 @@ def plot_distribution_beams(beams_tx, beams_rx):
     #plot.fig.set_figwidth(10)
     #plot.fig.set_figheight(6)
     name = 'Beams_distribution.png'
-    plt.savefig(path + name, transparent=False, dpi=300)
+    plt.savefig(name, transparent=False, dpi=300)
     plt.show()
 
 
@@ -130,34 +131,45 @@ def relation_coord_with_beams_Plot2D(all_data, title):
     data = pd.DataFrame(all_data, columns=['EpisodeID','x','y','z','LOS','rxBeams','txBeams'])
     print(data.head())
     path = '/Users/Joanna/git/Analise_de_dados/results/analyzes/'
-
+    ############################################
+    plt.figure(figsize=(10, 8))
     sns.set(style='darkgrid')
 
-    plot = sns.relplot(data=data,
-                       x='x',
-                       y='y',
-                       kind='scatter',
-                       # hue='txBeams',
-                       # size='txBeams',
-                       # sizes=(200, 20),
-                       # alpha=0.3,
-                       # palette='Spectral',
-                       style='txBeams'
-                       )
-    sns.set(rc={'figure.figsize': (60, 5)})
+    # Tx position
+    x_Tx = [746]
+    y_Tx = [560]
+    z_Tx = [4]
 
-    plot.fig.suptitle('Distribuicao dos indices dos Beams do Tx [1X16] \n relativo à posicao usando dados ' + title,
-                      fontweight='bold')
-    plot.fig.subplots_adjust(top=0.90)
-    plot.fig.set_figwidth(6)
-    plot.fig.set_figheight(8)
+    # Plota o Tx
+    plt.plot(x_Tx, y_Tx,
+             marker=5,
+             markersize=20,
+             markeredgecolor="black",
+             markerfacecolor="red",
+             label='Tx')
 
-    # leg = plot._legend
-    # leg.set_bbox_to_anchor([1, 0.75])
-    name = 'relation_coord_with_Tx_1X16_beams_'+title+'.png'
-    plt.savefig(path + name, transparent=False, dpi=300)
-    plt.legend(bbox_to_anchor =(0.75, 1.15))
+    plot=sns.scatterplot(data=data,
+                    x='x',
+                    y='y',
+                    style='txBeams',
+                    palette='deep',
+                    hue='txBeams',
+                    #style='txBeams',
+                    sizes=(20,200),
+                    legend='brief'
+                    )
+
+    plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
+    plt.title('Distribuicao dos indices dos Beams do Tx \n relativo à posicao usando dados ' + title)
+    plt.subplots_adjust(top=0.94, left = 0.082)
+    name = 'relation_coord_with_Tx_beams_' + title + '.png'
+    plt.savefig(name, transparent=False, dpi=300)
     plt.show()
+
+
+
+    ############################################
+
 
 
     plot = sns.relplot(data=data,
@@ -165,21 +177,19 @@ def relation_coord_with_beams_Plot2D(all_data, title):
                 y='y',
                 kind='scatter',
                 hue='rxBeams',
-                size='rxBeams',
-                sizes=(200,20),
                 alpha=0.5,
-                palette='Spectral')
+                palette='deep')
     sns.set(rc={'figure.figsize':(60,5)})
 
-    plot.fig.suptitle('Distribuicao dos indices dos Beams do Tx [1X8] \n relativo à posicao usando dados '+title,
+    plot.fig.suptitle('Distribuicao dos indices dos Beams do Rx \n relativo à posicao usando dados '+title,
                       fontweight='bold')
     plot.fig.subplots_adjust(top=0.90)
     plot.fig.set_figwidth(6)
     plot.fig.set_figheight(8)
 
 
-    name = 'relation_coord_with_Tx_1X8_beams_' + title + '.png'
-    plt.savefig(path + name, transparent=False, dpi=300)
+    name = 'relation_coord_with_Rx_beams_' + title + '.png'
+    plt.savefig(name, transparent=False, dpi=300)
     plt.show()
 
 
@@ -189,7 +199,7 @@ def relation_coord_with_beams_extend_Plot2D(all_data, title):
     path = '/Users/Joanna/git/Analise_de_dados/results/analyzes/'
 
 
-    name = 'relation_coord_with_Tx_1X8_beams_extend_'+title+'.png'
+    name = 'relation_coord_with_Rx_8X32_beams_extend_'+title+'.png'
     print(name)
 
     sns.set(style='darkgrid')
@@ -202,18 +212,18 @@ def relation_coord_with_beams_extend_Plot2D(all_data, title):
                        style='rxBeams',
                        col='rxBeams',
                        legend=False)
-    plot.fig.suptitle('Distribuição dos indices dos Beams do Tx [1X8] \n relativo à posição usando dados ' + title,
+    plot.fig.suptitle('Distribuição dos indices dos Beams do Rx [8X32] \n relativo à posição usando dados ' + title,
                      fontweight='bold')
     plot.fig.subplots_adjust(top=0.825, left=0.048)
 
     plot.fig.set_figwidth(15)
     plot.fig.set_figheight(6)
-    plt.savefig(path+name, transparent=False, dpi=300)
+    plt.savefig(name, transparent=False, dpi=300)
     plt.show()
 
     #print(path+name+'.png')
 
-    name = 'relation_coord_with_Tx_1X16_beams_extend_' + title + '.png'
+    name = 'relation_coord_with_Tx_8X32_beams_extend_' + title + '.png'
     plot = sns.relplot(data=data,
                        x='x',
                        y='y',
@@ -227,13 +237,13 @@ def relation_coord_with_beams_extend_Plot2D(all_data, title):
     #plot.fig.set_size_inches(20, 6)
     plot.fig.set_figheight(6)
     plot.fig.set_figwidth(40)
-    plot.fig.suptitle('Distribuição dos indices dos Beams do Tx [1X16] \n relativo à posição usando dados ' + title,
+    plot.fig.suptitle('Distribuição dos indices dos Beams do Tx [8X32] \n relativo à posição usando dados ' + title,
                       fontweight='bold')
     plot.fig.subplots_adjust(top=0.825, left=0.048)
 
     plot.fig.set_figwidth(15)
     plot.fig.set_figheight(6)
-    plt.savefig(path + name, transparent=False, dpi=300)
+    plt.savefig(name, transparent=False, dpi=300)
     plt.show()
 
 
